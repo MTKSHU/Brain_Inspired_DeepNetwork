@@ -1,16 +1,19 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import torch.nn.functional as F
 
 class CNN(nn.nodule):
 	def __init__(sel):
 		super(TheModelClass, self).__init__()
 
-		self.cnn = nn.Sequential(nn.Conv2d(in_channels = 128, out_channels = 64, kernel_size = 3, stride = 2, padding = 1),
-										  nn.Linear(16 * 5 * 5, 120),
-										  nn.Linear(120, 84),
-										  #one neuron,
-										 )
+		self.cnn = nn.Sequential(nn.Conv2d(in_channels = 64, out_channels = 128, kernel_size = 3, stride = 2, padding = 1),
+							     nn.LeakyReLU(0.1),
+							     nn.Linear(128 * 160 * 160, 1024),
+							     nn.Linear(1024, 1024),
+							     nn.Linear(1024,1)
+							     nn.Sigmoid()
+								)
 
 	def forward(self, x):	
 		x = self.cnn(x)
@@ -18,7 +21,7 @@ class CNN(nn.nodule):
 
 model = CNN()
 iterations = 10
-criterion = nn.MSELoss()
+criterion = nn.BCELoss()
 lr = 0.001
 weight_decay=0.0001
 optimizer = optim.Adam(net.parameters(), lr = lr, weight_decay = weight_decay)
